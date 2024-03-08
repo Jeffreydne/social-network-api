@@ -103,6 +103,6 @@ This project was built from scratch.
 ---
 ## Credits
 
-  This application was built from scratch. I have used many of the strategies taught by the excellent instructers at the UC Berkeley Extension Full Stack coding bootcamp. In this case I used variations of methods taugt in unit2 117 7 18, which deal with mongoDB and mongoose npm.  Finally, I copied open source badges from Vedant Chainani at the website https://dev.to/envoy_/150-badges-for-github-pnk#contents 
+  This application was built from scratch. I have used many of the strategies taught by the excellent instructers at the UC Berkeley Extension Full Stack coding bootcamp. In this case I used variations of methods taught in unit 18, which deals with mongoDB and mongoose npm.  Finally, I copied open source badges from Vedant Chainani at the website https://dev.to/envoy_/150-badges-for-github-pnk#contents 
  
 ---
