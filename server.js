@@ -10,14 +10,16 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get('users',
+
+// find all users
+app.get('/users',
 async (req, res) => {
     try {
         const userData = await User.find({});
         res.status(200).json(userData);
     } catch (err) {
         console.log(`ERROR from server.js line 19 ${err}`);
-        res.status(500).json({ message: 'Something is worng in User.find() inserver.js'});
+        res.status(500).json({ message: 'Something is wrong in User.find() inserver.js'});
     }
 })
 
