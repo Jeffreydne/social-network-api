@@ -5,9 +5,12 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     // define username & email properties
     username: { type: String, required: true, unique: true, trim: true },
-    email: { type: String, required: true, unique: true, validate: true }, 
+    email: { type: String, required: true, unique: true }, 
     
     // TODO
+    //  add: , validate: true 
+    // ... inside the "}" at end of line 8
+    
     // add 2 subdocuments: thoughts & friends
 
 });
