@@ -21,7 +21,23 @@ async (req, res) => {
         console.log(`ERROR from server.js line 19 ${err}`);
         res.status(500).json({ message: 'Something is wrong in User.find() inserver.js'});
     }
-})
+});
+// Create a new user
+app.post('/newUser', (req,res) => {
+    const newUser = new User({
+        username: req.body.username,
+        email: req.body.email
+    });
+    newUser.save();
+    if (newUser) {
+        res.status(200).json(newUser);
+    } else {
+        console.log(`Error: line 35 in server.js`);
+        res.status(500).json({
+            message: 'Something went wrong'
+        });
+    }
+});
 
 db.once('open', () => {
     app.listen(PORT, () => {
