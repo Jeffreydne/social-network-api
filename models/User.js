@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     // TODO
     //  add: , validate: true 
     // ... inside the "}" at end of line 8
-    
+
     // add 2 subdocuments: thoughts & friends
 
 });
@@ -24,10 +24,10 @@ User.find({})
         if(collection.length === 0) {
             User.insertMany(
                 [
-                    {userName: 'Yogi', email: 'yogi@gmail.com'},
-                    {userName: 'Boo Boo', email: 'booboo@gmail.com'},
-                    {userName: 'Bullwinnkle', email: 'bullwinkle@gmail.com'},
-                    {userName: 'Rocky', email: 'rocky@gmail.com'},        
+                    {username: 'Yogi', email: 'yogi@gmail.com'},
+                    {username: 'Boo Boo', email: 'booboo@gmail.com'},
+                    {username: 'Bullwinnkle', email: 'bullwinkle@gmail.com'},
+                    {username: 'Rocky', email: 'rocky@gmail.com'},        
                 ]
             )
             .catch(err => handleError(err));
