@@ -1,7 +1,6 @@
 const express = require('express');
 const db = require('./config/connection');
 
-// const ObjectId = require('mongodb');
 // require models
 const { User, Thought } = require('./models');
 
@@ -32,7 +31,8 @@ app.get('/findUser/:id', async (req, res) => {
         console.log(`ERROR from server.js line 26 ${err}`);
         res.status(500).json({ message: 'Something is wrong in User.findOne() inserver.js'});
     }
-})
+});
+
 // Create a new user
 app.post('/newUser', (req,res) => {
     const newUser = new User({
@@ -82,11 +82,39 @@ async (req, res) => {
         const userData = await Thought.find({});
         res.status(200).json(userData);
     } catch (err) {
-        console.log(`ERROR from server.js line 84 ${err}`);
-        res.status(500).json({ message: 'Something is wrong in User.find() for thoughts in server.js'});
+        console.log(`ERROR from server.js line 78 ${err}`);
+        res.status(500).json({ message: 'Something is wrong in Thought.find() for thoughts in server.js'});
     }
 });
 
+// find one thought
+app.get('/findThought/:id', async (req, res) => {
+    try {
+        const result = await Thought.findById(`${req.params.id}`);
+        res.status(200).json(result);
+    } catch (err) {
+        console.log(`ERROR from server.js line 90 ${err}`);
+        res.status(500).json({ message: 'Something is wrong in Thought.findOne() inserver.js'});
+    }
+});
+
+// Create a new thought
+app.post('/newThought', (req,res) => {
+    const newThought = new Thought({
+        thoughtText: req.body.thoughtText,
+        username: req.body.username,
+        
+    });
+    newThought.save();
+    if (newThought) {
+        res.status(200).json(newThought);
+    } else {
+        console.log(`Error: line 102 in server.js`);
+        res.status(500).json({
+            message: 'Something went wrong'
+        });
+    }
+});
 // once db is open then activate listener for server for app and log to console the port that server is running on
 db.once('open', () => {
     app.listen(PORT, () => {
