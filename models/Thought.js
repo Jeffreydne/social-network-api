@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { Schema, model } = require('mongoose');
 
 // schema instance for reaction subdocument for thoughts

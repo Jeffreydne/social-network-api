@@ -1,9 +1,9 @@
 const express = require('express');
 const db = require('./config/connection');
 
-const ObjectId = require('mongodb');
+// const ObjectId = require('mongodb');
 // require models
-const { User } = require('./models');
+const { User, Thought } = require('./models');
 
 const PORT = process.env.PORT || 3015
 // set up app variable to be an instance of express, using the methods below
@@ -24,10 +24,9 @@ async (req, res) => {
     }
 });
 // find one user
-app.get('findUser', async (req, res) => {
+app.get('/findUser/:id', async (req, res) => {
     try {
-        const result = await User.findOne({ _id: new ObjectId(req.body._id)
-        });
+        const result = await User.findById(`${req.params.id}`);
         res.status(200).json(result);
     } catch (err) {
         console.log(`ERROR from server.js line 26 ${err}`);
@@ -79,6 +78,20 @@ app.put('/updateUser/:userName', async (req, res) => {
       res.status(500).json({ error: 'Something went wrong with update' });
     }
 });
+
+// find all thoughts
+app.get('/thoughts',
+async (req, res) => {
+    try {
+        const userData = await Thought.find({});
+        res.status(200).json(userData);
+    } catch (err) {
+        console.log(`ERROR from server.js line 84 ${err}`);
+        res.status(500).json({ message: 'Something is wrong in User.find() for thoughts in server.js'});
+    }
+});
+
+// once db is open then activate listener for server for app and log to console the port that server is running on
 db.once('open', () => {
     app.listen(PORT, () => {
         console.log(`API server running on port ${PORT}!`);
