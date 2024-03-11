@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 
 // construct new instance of schema class to define users collection
@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
     // define username & email properties
     username: { type: String, required: true, unique: true, trim: true },
     email: { type: String, required: true, unique: true }, 
+    thoughts: [],
+    friends: [],
     
     // TODO
     //  add: , validate: true 
