@@ -52,9 +52,9 @@ app.post('/newUser', (req,res) => {
 
 // delete user based on username
 //  TODO change search criteria to _id
-app.delete('/delete', async (req, res) => {
+app.delete('/delete/:id', async (req, res) => {
     try {
-        const result = await User.findOneAndDelete({ username: req.body.username });
+        const result = await User.findByIdAndDelete(`${req.params.id}`);
     res.status(200).json(result);
     console.log(`Deleted: ${result}`);
     } catch (err) {
@@ -65,12 +65,10 @@ app.delete('/delete', async (req, res) => {
 
 // update user info
 // TODO change search criteria to _id
-app.put('/updateUser/:userName', async (req, res) => {
+app.put('/updateUser/:id', async (req, res) => {
     try {
-      const result = await User.findOneAndUpdate(
-        {
-        username: req.params.userName 
-      }, {username: req.body.username, email: req.body.email}, {new:true});
+      const result = await User.findByIdAndUpdate(
+        `${req.params.id}` , {username: req.body.username, email: req.body.email}, {new:true});
       res.status(200).json(result);
       console.log(`Updated: ${result}`);
     } catch (err) {
