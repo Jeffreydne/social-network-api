@@ -22,7 +22,7 @@ async (req, res) => {
         res.status(500).json({ message: 'Something is wrong in User.find() inserver.js'});
     }
 });
-// find one user
+// find one user from the id
 app.get('/findUser/:id', async (req, res) => {
     try {
         const result = await User.findById(`${req.params.id}`);
@@ -50,7 +50,7 @@ app.post('/newUser', (req,res) => {
     }
 });
 
-// delete user based on username
+// delete user based on user id
 app.delete('/delete/:id', async (req, res) => {
     try {
         const result = await User.findByIdAndDelete(`${req.params.id}`);
@@ -62,7 +62,7 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
-// update user info
+// update user info using user id
 app.put('/updateUser/:id', async (req, res) => {
     try {
       const result = await User.findByIdAndUpdate(
@@ -103,7 +103,7 @@ app.post('/newThought', (req,res) => {
     const newThought = new Thought({
         thoughtText: req.body.thoughtText,
         username: req.body.username,
-        
+
     });
     newThought.save();
     if (newThought) {
@@ -115,6 +115,31 @@ app.post('/newThought', (req,res) => {
         });
     }
 });
+
+// update a thought based on thought id
+app.put('/updateThought/:id', async (req, res) => {
+    try {
+      const result = await Thought.findByIdAndUpdate(
+        `${req.params.id}` , {username: req.body.username, thoughtText: req.body.thoughtText}, {new:true});
+      res.status(200).json(result);
+      console.log(`Updated: ${result}`);
+    } catch (err) {
+      console.log('Uh Oh, something went wrong with line 120 (app.put)');
+      res.status(500).json({ error: 'Something went wrong with thought update' });
+    }
+});
+// delete a thought based on thought id
+app.delete('/deleteThought/:id', async (req, res) => {
+    try {
+        const result = await Thought.findByIdAndDelete(`${req.params.id}`);
+    res.status(200).json(result);
+    console.log(`Deleted: ${result}`);
+    } catch (err) {
+        console.log('Uh Oh, something went wrong line 132 server.js thought.delete');
+        res.status(500).json({ message: 'something went wrong with thought delete' });
+    }
+});
+
 // once db is open then activate listener for server for app and log to console the port that server is running on
 db.once('open', () => {
     app.listen(PORT, () => {
