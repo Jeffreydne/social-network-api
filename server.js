@@ -43,7 +43,7 @@ app.post('/newUser', (req,res) => {
     if (newUser) {
         res.status(200).json(newUser);
     } else {
-        console.log(`Error: line 35 in server.js`);
+        console.log(`Error: line 37 in server.js`);
         res.status(500).json({
             message: 'Something went wrong'
         });
@@ -51,7 +51,6 @@ app.post('/newUser', (req,res) => {
 });
 
 // delete user based on username
-//  TODO change search criteria to _id
 app.delete('/delete/:id', async (req, res) => {
     try {
         const result = await User.findByIdAndDelete(`${req.params.id}`);
@@ -64,7 +63,6 @@ app.delete('/delete/:id', async (req, res) => {
 });
 
 // update user info
-// TODO change search criteria to _id
 app.put('/updateUser/:id', async (req, res) => {
     try {
       const result = await User.findByIdAndUpdate(
@@ -72,7 +70,7 @@ app.put('/updateUser/:id', async (req, res) => {
       res.status(200).json(result);
       console.log(`Updated: ${result}`);
     } catch (err) {
-      console.log('Uh Oh, something went wrong with line 69 (app.put)');
+      console.log('Uh Oh, something went wrong with line 67 (app.put)');
       res.status(500).json({ error: 'Something went wrong with update' });
     }
 });
