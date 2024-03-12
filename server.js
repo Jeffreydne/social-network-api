@@ -99,19 +99,22 @@ app.get('/findThought/:id', async (req, res) => {
 });
 
 // Create a new thought
-app.post('/newThought', (req,res) => {
-    const newThought = new Thought({
-        thoughtText: req.body.thoughtText,
-        username: req.body.username,
+// 1st find the user
 
+app.post('/newThought', async (req,res) => {
+    let user = await User.findOne({username: req.body.username});
+    if(user) {
+    const newThought = await Thought.create({
+        thoughtText: req.body.thoughtText,
+        // username: req.body.username,
     });
-    newThought.save();
-    if (newThought) {
-        res.status(200).json(newThought);
+    user.thoughts.push(newThought);
+    user.save();
+    res.status(200).json(newThought);
     } else {
         console.log(`Error: line 102 in server.js`);
-        res.status(500).json({
-            message: 'Something went wrong'
+        res.status(404).json({
+            message: 'Something went wrong, User not found'
         });
     }
 });
