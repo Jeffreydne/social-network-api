@@ -25,7 +25,9 @@ async (req, res) => {
 // find one user from the id
 app.get('/findUser/:id', async (req, res) => {
     try {
-        const result = await User.findById(`${req.params.id}`);
+        const result = await User.findOne({_id: req.params.id})
+        .select('-__v')
+        .populate('thoughts');
         res.status(200).json(result);
     } catch (err) {
         console.log(`ERROR from server.js line 26 ${err}`);
@@ -51,7 +53,7 @@ app.post('/newUser', (req,res) => {
 });
 
 // delete user based on user id
-app.delete('/delete/:id', async (req, res) => {
+app.delete('/deleteUser/:id', async (req, res) => {
     try {
         const result = await User.findByIdAndDelete(`${req.params.id}`);
     res.status(200).json(result);
@@ -74,6 +76,19 @@ app.put('/updateUser/:id', async (req, res) => {
       res.status(500).json({ error: 'Something went wrong with update' });
     }
 });
+
+// add a friend
+app.post('newFriend/user/:userId/:friendId', 
+ async (req, res) => {
+    try {
+
+    } catch (err) {
+        console.log(`ERROR from server.js line 81 ${err}`);
+        res.status(500).json({ message: 'Something is wrong in post newFriend in server.js'});
+    }
+ });
+
+ // delete a friend
 
 // find all thoughts
 app.get('/thoughts',
@@ -104,10 +119,13 @@ app.get('/findThought/:id', async (req, res) => {
 app.post('/newThought', async (req,res) => {
     let user = await User.findOne({username: req.body.username});
     if(user) {
+        console.log(user);
     const newThought = await Thought.create({
         thoughtText: req.body.thoughtText,
         // username: req.body.username,
-    });
+    })
+    // .populate('thoughts');
+    console.log(user.thoughts);
     user.thoughts.push(newThought);
     user.save();
     res.status(200).json(newThought);

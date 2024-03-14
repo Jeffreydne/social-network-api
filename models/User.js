@@ -1,30 +1,45 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const { Schema, model } = require('mongoose');
 // const  {thoughtSchema} = require('./Thought.js')
 
 
 // construct new instance of schema class to define users collection
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     // define username & email properties
     username: { type: String, required: true, unique: true, trim: true },
     email: { type: String, required: true, unique: true }, 
-    // change thoughts to a reference like in one of last activities
     thoughts: [
         { type: Schema.Types.ObjectId,
         ref: 'thought' }
     ],
 
-    friends: [],
-    
+    friends: [
+        { type: Schema.Types.ObjectId,
+            ref: 'user' }
+    ],
+
     // TODO
     //  add: , validate: true 
     // ... inside the "}" at end of line 8
 
     // add 2 subdocuments: thoughts & friends
 
+},
+{
+    toJSON: {
+        virtuals: true,
+    },
+    id: false, 
+
+}
+);
+// create virtual property of friend count
+userSchema.virtual('friendCount').get(function () {
+    return this.friends.length;
 });
 
-const User = mongoose.model('User', userSchema);
+
+const User = model('User', userSchema);
 
 const handleError = (err) => console.log(`ERROR, log is from User.js line 17: ${err}`);
 User.find({})
