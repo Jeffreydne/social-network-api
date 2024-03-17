@@ -3,6 +3,7 @@ const db = require('./config/connection');
 
 // require models
 const { User, Thought } = require('./models');
+// XXXXXXX might be able to delete line 7 XXXXXXXXXX
 const { reactionSchema } = require('./models/Thought.js');
 
 const PORT = process.env.PORT || 3015
@@ -23,7 +24,7 @@ async (req, res) => {
         res.status(500).json({ message: 'Something is wrong in User.find() inserver.js'});
     }
 });
-// find one user from the id
+// find one user from the id, then populate the  user.thoughts array, then send back the user data
 app.get('/findUser/:id', async (req, res) => {
     try {
         const result = await User.findOne({_id: req.params.id})
@@ -125,13 +126,13 @@ app.get('/findThought/:id', async (req, res) => {
 app.post('/newThought', async (req,res) => {
     let user = await User.findOne({username: req.body.username});
     if(user) {
-        console.log(user);
+        // console.log(user);
     const newThought = await Thought.create({
         thoughtText: req.body.thoughtText,
         username: req.body.username,
     })
     // .populate('thoughts');
-    console.log(user.thoughts);
+    // console.log(user.thoughts);
     user.thoughts.push(newThought);
     await user.save();
     res.status(200).json(newThought);
