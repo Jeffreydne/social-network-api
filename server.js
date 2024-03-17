@@ -94,6 +94,20 @@ app.post('/newFriend/user/:userId/:friendId',
  });
 
  // delete a friend
+ app.delete('/deleteFriend/user/:userId/:friendId', 
+ async (req, res) => {
+    try {
+        let user = await User.findOne({_id: req.params.userId});
+        // delete function here
+        
+        // user.friends.push(req.params.friendId);
+        await user.save();
+        res.status(200).send("Friend deleted.")
+    } catch (err) {
+        console.log(`ERROR from server.js line 97 ${err}`);
+        res.status(500).json({ message: 'Something is wrong in post newFriend in server.js'});
+    }
+ });
 
 // find all thoughts
 app.get('/thoughts',
