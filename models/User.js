@@ -10,12 +10,12 @@ const userSchema = new Schema({
     email: { type: String, required: true, unique: true }, 
     thoughts: [
         { type: Schema.Types.ObjectId,
-        ref: 'thought' }
+        ref: 'Thought' }
     ],
 
     friends: [
         { type: Schema.Types.ObjectId,
-            ref: 'user' }
+            ref: 'User' }
     ],
 
     // TODO

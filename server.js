@@ -3,6 +3,7 @@ const db = require('./config/connection');
 
 // require models
 const { User, Thought } = require('./models');
+const { reactionSchema } = require('./models/Thought.js');
 
 const PORT = process.env.PORT || 3015
 // set up app variable to be an instance of express, using the methods below
@@ -36,12 +37,12 @@ app.get('/findUser/:id', async (req, res) => {
 });
 
 // Create a new user
-app.post('/newUser', (req,res) => {
+app.post('/newUser', async (req,res) => {
     const newUser = new User({
         username: req.body.username,
         email: req.body.email
     });
-    newUser.save();
+    await newUser.save();
     if (newUser) {
         res.status(200).json(newUser);
     } else {
@@ -78,10 +79,13 @@ app.put('/updateUser/:id', async (req, res) => {
 });
 
 // add a friend
-app.post('newFriend/user/:userId/:friendId', 
+app.post('/newFriend/user/:userId/:friendId', 
  async (req, res) => {
     try {
-
+        let user = await User.findOne({_id: req.params.userId});
+        user.friends.push(req.params.friendId);
+        await user.save();
+        res.status(200).send("Friend added.")
     } catch (err) {
         console.log(`ERROR from server.js line 81 ${err}`);
         res.status(500).json({ message: 'Something is wrong in post newFriend in server.js'});
@@ -94,7 +98,9 @@ app.post('newFriend/user/:userId/:friendId',
 app.get('/thoughts',
 async (req, res) => {
     try {
-        const userData = await Thought.find({});
+        const userData = await Thought.find.populate('reactions');
+        // added.populate and removed: ({});
+        
         res.status(200).json(userData);
     } catch (err) {
         console.log(`ERROR from server.js line 78 ${err}`);
@@ -122,12 +128,12 @@ app.post('/newThought', async (req,res) => {
         console.log(user);
     const newThought = await Thought.create({
         thoughtText: req.body.thoughtText,
-        // username: req.body.username,
+        username: req.body.username,
     })
     // .populate('thoughts');
     console.log(user.thoughts);
     user.thoughts.push(newThought);
-    user.save();
+    await user.save();
     res.status(200).json(newThought);
     } else {
         console.log(`Error: line 102 in server.js`);
@@ -161,6 +167,29 @@ app.delete('/deleteThought/:id', async (req, res) => {
     }
 });
 
+// add a reaction
+app.post('/newReaction/:thoughtId/',  
+ async (req, res) => {
+    const { reactionBody, username } = req.body;
+    console.log({ reactionBody, username });
+    try {
+        let thought = await Thought.findById(`${req.params.thoughtId}`);
+        console.log(thought);
+        // let newReaction = new reactionSchema({
+        //     reactionBody: req.body.reactionBody,
+        //     username: req.body.username
+        // });
+            // console.log({newReaction});
+        // await newReaction.save();
+        thought.reactions.push({ reactionBody, username });
+        await thought.save();
+        res.status(201).json(thought);
+        // send("Reaction added.");
+    } catch (err) {
+        console.log('Uh Oh, something went wrong line 170 server.js adding a reaction');
+        res.status(500).json({ message: 'something went wrong with adding the reaction' });
+    }
+ });
 // once db is open then activate listener for server for app and log to console the port that server is running on
 db.once('open', () => {
     app.listen(PORT, () => {
