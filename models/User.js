@@ -17,13 +17,6 @@ const userSchema = new Schema({
         { type: Schema.Types.ObjectId,
             ref: 'User' }
     ],
-
-    // TODO
-    //  add: , validate: true 
-    // ... inside the "}" at end of line 8
-
-    // add 2 subdocuments: thoughts & friends
-
 },
 {
     toJSON: {
