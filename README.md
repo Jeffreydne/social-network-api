@@ -31,7 +31,7 @@ An api to connect to a mongo database using mongoose ODM
 
 [Watch the screencastify video explaining how to use the app](https://XXXXXXXXXXXXXXXXXXXXX)
 
-This application allows a user to interact with the Mongo Database which stores information, related to a social networking site, locally. The user will be able to do CRUD operations on 2 collections: users and thoughts. Users will also be able to create firends lists and to react to the thougts of their friends. 
+This application allows a user to interact with the Mongo Database which stores information, related to a social networking site, locally. The user will be able to do CRUD operations on 2 collections: users and thoughts. Users will also be able to create friends lists and to react to the thougts of their friends. Virtuals will be used to display the number of friends when a users are displayed, and to display the number of reactions per thought when thoughts are displayed. 
 
 ---
 
@@ -50,17 +50,42 @@ The following javascript snippet shows
 ```JS
 
 ```
-The following line of javascript uses  
+The following line of javascript uses new Schema to instantiate an instance of both the reaction schema and the thought schema. The reactionSchema becomes part of the thoughtSchema as it is called in the array of reactions which are part of teh thought schema.
 ```JS
+// schema instance for reaction subdocument for thoughts
+const reactionSchema = new Schema({
+    reactionId: { type: Schema.Types.ObjectId, 
+    default: mongoose.Types.ObjectId,
+    },
+    reactionBody: { type: String, required: true, maxLength: 280 },
+    username: { type: String, required: true },
+    createdOn: { type: Date, default: Date.now },
+});
 
+// schema for thoughts document
+const thoughtSchema = new Schema({
+    thoughtText: { type: String, required: true, minLength: 1, maxLength: 280 }, 
+    createdOn: { type: Date, default: Date.now },
+    username: { type: String, required: true }, 
+    // notice reactionSchema being used to define the contents of the reactions array. 
+    reactions: [reactionSchema],
+}, 
 
 ```
-The following code shows 
-
+The following code is a continuation of the above code. It shows how a virtual was created to display the number of reactions to each thought whenever thought data is requested. First, at the end of the thoughts schema, the virtuals syntax is added. The closing }); (after the id: false) closes the thoughtSchema, which is opened with "new Schema({" for the thoughtSchema in the prior snippet, just above this one. Then the virtual method is used, to add "reactionCount" to the thought schema so that it can be displayed along with the rest of the thought data, when a thought or thoughts are requested. 
 
 
 ```JS
-
+{
+    toJSON: {
+        virtuals: true,
+    },
+    id: false, 
+});
+// create virtual property of reaction count
+thoughtSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
+});
 ```
 
 
@@ -77,17 +102,15 @@ This website is designed to allow a user to view the users, and user thoughts, i
 
 This project was built from scratch. 
 
-* Mongoose is used to create a data base and set up the required document objects. Additionally these tables are populated with the initial data using the seeds.sql file.   
+* Mongoose is used to create a data base and set up the required document objects. 
+
+* In this project these collections are built manually using MongoDB Compass. In an actual social networking APP the collections would be built as the users interact with the database.
 
 * The use of mongoose is required and instantiated into the variable db. 
 
-<!-- mysql2 is then called using "const db = mysql.createConnection" with the required data in the subsequent code. Mysql2 allows the user to see and/or add to the data in the prebuilt tables.  -->
+* Reaction is a subdocument to the Thoughts document. Reactions are added in their own POST fetch request, but are displayed along with the thought they are connected to when a GET fetch request is made for one or all thoughts. 
 
-*  
-
-*  
-
-*  
+*  Virtuals are used to present the number of friends that each user has, and also to present the number of reactions each thought has, when ever the user or thought data is fetched with a get.
    
 ---
 
