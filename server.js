@@ -99,7 +99,7 @@ app.post('/newFriend/user/:userId/:friendId',
     try {
         let user = await User.findOne({_id: req.params.userId});
         // delete function here
-        
+
         // user.friends.push(req.params.friendId);
         await user.save();
         res.status(200).send("Friend deleted.")
@@ -185,7 +185,12 @@ app.delete('/deleteThought/:id', async (req, res) => {
 // add a reaction
 app.post('/newReaction/:thoughtId/',  
  async (req, res) => {
-    const { reactionBody, username } = req.body;
+    // const { reactionBody, username } = req.body;
+    //XXXXXXX replace ???? below and uncomment out
+    // const newReaction = await ????.create({
+    //     reactionName: req.body.reactionName,
+    //     username: req.body.username,
+    // })
     console.log({ reactionBody, username });
     try {
         let thought = await Thought.findById(`${req.params.thoughtId}`);
@@ -205,6 +210,10 @@ app.post('/newReaction/:thoughtId/',
         res.status(500).json({ message: 'something went wrong with adding the reaction' });
     }
  });
+
+ // delete a reaction
+
+
 // once db is open then activate listener for server for app and log to console the port that server is running on
 db.once('open', () => {
     app.listen(PORT, () => {
