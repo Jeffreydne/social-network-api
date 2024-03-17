@@ -113,7 +113,8 @@ app.post('/newFriend/user/:userId/:friendId',
 app.get('/thoughts',
 async (req, res) => {
     try {
-        const userData = await Thought.find.populate('reactions');
+        const userData = await Thought.find({});
+        // populate('reactions');
         // added.populate and removed: ({});
         
         res.status(200).json(userData);
