@@ -212,7 +212,15 @@ app.post('/newReaction/:thoughtId/',
  });
 
  // delete a reaction
+//  app.post('/deleteReaction/:reactionId/',  
+//  async (req, res) => {
+//     try{
 
+//     } catch (err) {
+//             console.log('Uh Oh, something went wrong line 215 server.js deleting a reaction');
+//             res.status(500).json({ message: 'something went wrong with deleting the reaction' });
+//     }
+//  });
 
 // once db is open then activate listener for server for app and log to console the port that server is running on
 db.once('open', () => {
