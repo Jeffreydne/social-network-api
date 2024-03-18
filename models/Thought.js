@@ -4,7 +4,7 @@ const { Schema, model } = require('mongoose');
 // schema instance for reaction subdocument for thoughts
 const reactionSchema = new Schema({
     reactionId: { type: Schema.Types.ObjectId, 
-    default: mongoose.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
     },
     reactionBody: { type: String, required: true, maxLength: 280 },
     username: { type: String, required: true },
