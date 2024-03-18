@@ -29,7 +29,7 @@ An api to connect to a mongo database and store data using mongoose ODM.
 
 [Visit the Github repository](https://github.com/Jeffreydne/social-network-api)
 
-[Watch the screencastify video explaining how to use the app](https://XXXXXXXXXXXXXXXXXXXXX)
+[Watch the screencastify video explaining how to use the app](https://app.screencastify.com/v3/watch/Kw9nxA243GuHoJ96qwSR)
 
 This application allows a user to interact with the Mongo Database to store, get, delete and modify information, that is related to a social networking site. The user will be able to do CRUD operations on 2 collections: users and thoughts. Users will also be able to create friends lists and to add reactions to the thoughts of their friends. Virtuals will be used to display the number of friends when user data is displayed, and to display the number of reactions per thought when thoughts are displayed. 
 
