@@ -44,7 +44,7 @@ This application requires the npm modules express and mongoose. You will need to
 
 ## Code Example
 
-The three code examples below show how mongoose is used to implement various asopects of website funtionality.
+The three code examples below show how mongoose is used to implement various aspects of website funtionality.
 
 The following javascript snippet shows how a new thought is created using an app.post fetch request, and including various mongoose methods: 
 
