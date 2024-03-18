@@ -131,12 +131,18 @@ app.get('/findThought/:id', async (req, res) => {
 // 1st find the user
 
 app.post('/newThought', async (req, res) => {
-    let user = await User.findOne({ username: req.body.username });
+    try{
+    let user = await User.findOne({ username: req.body.username })
+    .select('-__v')
+    .populate('thoughts');
     if (user) {
+        console.log(user);
         const newThought = await Thought.create({
             thoughtText: req.body.thoughtText,
             username: req.body.username,
         })
+        console.log(newThought);
+        console.log(user.thoughts);
         user.thoughts.push(newThought);
         await user.save();
         res.status(200).json(newThought);
@@ -146,6 +152,10 @@ app.post('/newThought', async (req, res) => {
             message: 'Something went wrong, User not found'
         });
     }
+} catch (error) {
+    console.log('error posting new thought:', error);
+    res.status(500).json({message: 'Server error'});
+}
 });
 
 // update a thought based on thought id
