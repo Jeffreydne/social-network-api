@@ -3,8 +3,6 @@ const db = require('./config/connection');
 
 // require models
 const { User, Thought } = require('./models');
-// XXXXXXX might be able to delete line 7 XXXXXXXXXX
-const { reactionSchema } = require('./models/Thought.js');
 
 const PORT = process.env.PORT || 3015
 // set up app variable to be an instance of express, using the methods below
@@ -99,12 +97,7 @@ app.delete('/deleteFriend/user/:userId/:friendId',
         try {
             let user = await User.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } },
                 { new: true });
-            // delete function here
-
             res.json(user);
-            // user.friends.push(req.params.friendId);
-            // await user.save();
-            // res.status(200).send("Friend deleted.")
         } catch (err) {
             console.log(`ERROR from server.js line 97 ${err}`);
             res.status(500).json({ message: 'Something is wrong in post newFriend in server.js' });
@@ -116,9 +109,6 @@ app.get('/thoughts',
     async (req, res) => {
         try {
             const userData = await Thought.find({});
-            // populate('reactions');
-            // added.populate and removed: ({});
-
             res.status(200).json(userData);
         } catch (err) {
             console.log(`ERROR from server.js line 78 ${err}`);
@@ -143,13 +133,10 @@ app.get('/findThought/:id', async (req, res) => {
 app.post('/newThought', async (req, res) => {
     let user = await User.findOne({ username: req.body.username });
     if (user) {
-        // console.log(user);
         const newThought = await Thought.create({
             thoughtText: req.body.thoughtText,
             username: req.body.username,
         })
-        // .populate('thoughts');
-        // console.log(user.thoughts);
         user.thoughts.push(newThought);
         await user.save();
         res.status(200).json(newThought);
@@ -189,27 +176,16 @@ app.delete('/deleteThought/:id', async (req, res) => {
 app.post('/newReaction/:thoughtId/',
     async (req, res) => {
         const { reactionBody, username } = req.body;
-        //XXXXXXX replace ???? below and uncomment out
-        // const newReaction = await ????.create({
-        //     reactionName: req.body.reactionName,
-        //     username: req.body.username,
-        // })
         console.log({ reactionBody, username });
         try {
             let thought = await Thought.findById(`${req.params.thoughtId}`);
             console.log(thought);
-            // let newReaction = new reactionSchema({
-            //     reactionBody: req.body.reactionBody,
-            //     username: req.body.username
-            // });
-            // console.log({newReaction});
             thought.reactions.push({
                 reactionBody: req.body.reactionBody,
                 username: req.body.username
             });
             await thought.save();
             res.status(201).json(thought);
-            // send("Reaction added.");
         } catch (err) {
             console.log('Uh Oh, something went wrong line 170 server.js adding a reaction', err);
             res.status(500).json({ message: 'something went wrong with adding the reaction' });

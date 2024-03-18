@@ -1,7 +1,5 @@
-// const mongoose = require('mongoose');
+// require Schema and model methods from mongoose
 const { Schema, model } = require('mongoose');
-// const  {thoughtSchema} = require('./Thought.js')
-
 
 // construct new instance of schema class to define users collection
 const userSchema = new Schema({
